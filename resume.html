@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Subhash Chandra - Resume (AI & ML Engineer)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Reset & Base Setup */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #1a1a1a;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.35;
+      font-size: 9.5pt;
+      padding: 20px 0;
+    }
+
+    /* Top Action Bar (hidden when printing) */
+    .top-action-bar {
+      max-width: 820px;
+      margin: 0 auto 16px auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      background: #131b2e;
+      border: 1px solid #1f2a44;
+      border-radius: 12px;
+      color: #e2e8f0;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-back {
+      background: #1e293b;
+      color: #94a3b8;
+    }
+    .btn-back:hover {
+      background: #334155;
+      color: #fff;
+    }
+
+    .btn-print {
+      background: #0284c7;
+      color: #fff;
+    }
+    .btn-print:hover {
+      background: #0369a1;
+    }
+
+    .btn-download {
+      background: #059669;
+      color: #fff;
+    }
+    .btn-download:hover {
+      background: #047857;
+    }
+
+    /* Resume Sheet (Strict 1-Page Layout) */
+    .resume-sheet {
+      background: #ffffff;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 32px 42px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      border-radius: 4px;
+      color: #1e293b;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 12px;
+      border-bottom: 1.5px solid #0f172a;
+      padding-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 20pt;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+      margin-bottom: 2px;
+      text-transform: capitalize;
+    }
+
+    .header .location {
+      font-size: 8.5pt;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+
+    .header .contact-row {
+      font-size: 8.5pt;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .header a {
+      color: #0284c7;
+      text-decoration: none;
+    }
+    .header a:hover {
+      text-decoration: underline;
+    }
+
+    /* Section Headings */
+    .section-title {
+      font-size: 10.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #0f172a;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 2px;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+
+    /* Entries */
+    .entry {
+      margin-bottom: 6px;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-weight: 700;
+      font-size: 9.5pt;
+      color: #0f172a;
+    }
+
+    .entry-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 8.5pt;
+      font-style: italic;
+      color: #334155;
+      margin-bottom: 2px;
+    }
+
+    .entry-date {
+      font-weight: 600;
+      font-size: 8.5pt;
+      color: #475569;
+      font-style: normal;
+    }
+
+    /* Bullet lists */
+    ul.bullets {
+      list-style-type: disc;
+      padding-left: 16px;
+      margin-top: 2px;
+    }
+
+    ul.bullets li {
+      font-size: 8.5pt;
+      color: #334155;
+      margin-bottom: 2px;
+      line-height: 1.32;
+    }
+
+    ul.bullets li strong {
+      color: #0f172a;
+    }
+
+    /* Skills list */
+    .skills-block {
+      font-size: 8.5pt;
+      line-height: 1.4;
+      color: #334155;
+    }
+
+    .skills-block strong {
+      color: #0f172a;
+    }
+
+    /* Certifications list */
+    .cert-item {
+      font-size: 8.5pt;
+      color: #334155;
+      margin-bottom: 2.5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .cert-item strong {
+      color: #0f172a;
+    }
+
+    .cert-item a {
+      color: #0284c7;
+      text-decoration: none;
+    }
+
+    .cert-date {
+      font-weight: 600;
+      font-size: 8pt;
+      color: #64748b;
+      white-space: nowrap;
+      margin-left: 8px;
+    }
+
+    /* Print Styles */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .top-action-bar {
+        display: none !important;
+      }
+      .resume-sheet {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+        margin: 0;
+      }
+      @page {
+        margin: 0.4in 0.45in 0.4in 0.45in;
+        size: A4 portrait;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Action Bar -->
+  <div class="top-action-bar">
+    <a href="index.html" class="btn btn-back">← Back to Portfolio</a>
+    <div style="display: flex; gap: 8px;">
+      <button onclick="window.print()" class="btn btn-print">🖨️ Print / Save PDF</button>
+      <a href="assets/resume.pdf" target="_blank" class="btn btn-download">⬇️ Original PDF</a>
+    </div>
+  </div>
+
+  <!-- 1-Page Printable Resume Sheet -->
+  <div class="resume-sheet">
+    
+    <!-- Header -->
+    <header class="header">
+      <h1>Subhash Chandra</h1>
+      <div class="location">Ghatkopar East, Mumbai – 400077, Maharashtra</div>
+      <div class="contact-row">
+        <span>+91-9587119902</span>
+        <span>•</span>
+        <a href="mailto:bishnoisub0@gmail.com">bishnoisub0@gmail.com</a>
+        <span>•</span>
+        <a href="https://linkedin.com/in/subhash-bishnoi" target="_blank">linkedin.com/in/subhash-bishnoi</a>
+        <span>•</span>
+        <a href="https://github.com/subhbishnoi" target="_blank">github.com/subhbishnoi</a>
+        <span>•</span>
+        <a href="https://subhbishnoi.github.io" target="_blank">subhbishnoi.github.io</a>
+      </div>
+    </header>
+
+    <!-- Education -->
+    <section>
+      <h2 class="section-title">Education</h2>
+      
+      <div class="entry">
+        <div class="entry-header">
+          <span>D.Y. Patil Deemed to be University</span>
+          <span class="entry-date">July 2023 – June 2027</span>
+        </div>
+        <div class="entry-sub">
+          <span>B.Tech – Computer Science & Engineering (AI & ML) | CGPA: 7.42</span>
+          <span>Navi Mumbai, India</span>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span>Board of Secondary Education, Rajasthan</span>
+          <span class="entry-date">March – April 2023</span>
+        </div>
+        <div class="entry-sub">
+          <span>Senior Secondary (XII) – Science | 66.20%</span>
+          <span>Gayatri VM Sr. SS, Sanchore, Jalore</span>
+        </div>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span>Board of Secondary Education, Rajasthan</span>
+          <span class="entry-date">July 2021</span>
+        </div>
+        <div class="entry-sub">
+          <span>Secondary (X) | 96.00%</span>
+          <span>Gayatri VM Sr. SS, Sanchore, Jalore</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Skills -->
+    <section>
+      <h2 class="section-title">Technical Skills</h2>
+      <div class="skills-block">
+        <div>• <strong>Languages:</strong> Python (Advanced), Java, JavaScript, C, SQL</div>
+        <div>• <strong>ML & AI:</strong> Supervised/Unsupervised Learning, Reinforcement Learning (DQN), Transfer Learning, Feature Engineering, MLOps</div>
+        <div>• <strong>Deep Learning:</strong> CNNs, RNNs, Object Detection (R-CNN, YOLO), Image Classification, Model Fine-tuning, RAG</div>
+        <div>• <strong>Frameworks:</strong> TensorFlow, PyTorch, Keras, Scikit-learn, Pandas, NumPy, Matplotlib, OpenCV, FastAPI, LangChain</div>
+        <div>• <strong>Tools & Databases:</strong> Git, GitHub, Google Colab, Docker, MySQL, Linux, Jenkins, MLflow, Render</div>
+      </div>
+    </section>
+
+    <!-- Experience -->
+    <section>
+      <h2 class="section-title">Experience</h2>
+      <div class="entry">
+        <div class="entry-header">
+          <span>Outlier.ai</span>
+          <span class="entry-date">2024 – Present</span>
+        </div>
+        <div class="entry-sub">
+          <span>Machine Learning Freelancer</span>
+          <span>Remote</span>
+        </div>
+        <ul class="bullets">
+          <li>Trained, fine-tuned, and evaluated ML models across classification, regression, and NLP tasks for production pipelines.</li>
+          <li>Preprocessed datasets exceeding <strong>100K+ records</strong> using Pandas and NumPy — handling missing values, feature engineering, and normalization.</li>
+          <li>Evaluated models using cross-validation, ROC-AUC, confusion matrices, and precision-recall metrics; delivered production-ready solutions and RLHF prompt benchmarking.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section>
+      <h2 class="section-title">Projects</h2>
+
+      <!-- Project 1 -->
+      <div class="entry">
+        <div class="entry-header">
+          <span>YouTube Comment Analyzer | <span style="font-weight:normal; font-size:8.5pt;">FastAPI, LangChain, RAG, Sentence Transformers, MLflow, Docker</span></span>
+          <span class="entry-date">Nov 2025</span>
+        </div>
+        <ul class="bullets">
+          <li>Architected an AI-powered comment analysis platform that processes discussions using NLP/LLM pipelines for sentiment analysis, question categorization, and insights.</li>
+          <li>Implemented <strong>RAG</strong> with vector embeddings and Sentence Transformers for semantic retrieval; containerized with Docker and tracked experiments with MLflow.</li>
+        </ul>
+      </div>
+
+      <!-- Project 2 -->
+      <div class="entry">
+        <div class="entry-header">
+          <span>Autonomous Snake Game – Deep Q-Learning | <span style="font-weight:normal; font-size:8.5pt;">Python, TensorFlow, Pygame, DQN</span></span>
+          <span class="entry-date">Jul 2024</span>
+        </div>
+        <ul class="bullets">
+          <li>Developed autonomous RL agents comparing tabular Q-Learning vs. Deep Q-Networks (DQN); trained and evaluated agents across 1,000 episodes.</li>
+          <li>Formulated custom state representations, reward shaping, experience replay, and ε-greedy exploration; DQN achieved a <strong>35.67 average score</strong> (10x over Q-learning: 3.16) and peak score of <strong>73</strong> over 100 deterministic games.</li>
+        </ul>
+      </div>
+
+      <!-- Project 3 -->
+      <div class="entry">
+        <div class="entry-header">
+          <span>Gym Injury Risk Predictor | <span style="font-weight:normal; font-size:8.5pt;">Python, FastAPI, Scikit-learn, MLOps, Render</span></span>
+          <span class="entry-date">2025</span>
+        </div>
+        <ul class="bullets">
+          <li>Built an end-to-end ML classification web app predicting gym injury risks from age, BMI, weight lifted, sets, reps, sleep hours, and injury history.</li>
+          <li>Deployed classification API with FastAPI on Render; applied MLOps practices including input validation and automated preprocessing schemas.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Achievements & Certifications -->
+    <section>
+      <h2 class="section-title">Achievements & Certifications</h2>
+      <div>
+        <div class="cert-item">
+          <span>• <strong>AWS Academy Graduate – Machine Learning Foundations</strong> — AWS Academy via Credly | 20 hrs</span>
+          <span class="cert-date">Apr 2026</span>
+        </div>
+        <div class="cert-item">
+          <span>• <strong>AWS Academy Graduate – Cloud Foundations</strong> — AWS Academy via Credly | 20 hrs</span>
+          <span class="cert-date">Apr 2026</span>
+        </div>
+        <div class="cert-item">
+          <span>• <strong>Generative AI and LLMs on AWS</strong> — edX – Prompt Engineering, RAG, AI Agents, SageMaker</span>
+          <span class="cert-date">May 2025</span>
+        </div>
+        <div class="cert-item">
+          <span>• <strong>Data Science for Engineers</strong> — Indian Institute of Technology–Madras via NPTEL</span>
+          <span class="cert-date">Aug 2026</span>
+        </div>
+        <div class="cert-item">
+          <span>• <strong>Python Basics for Data Science</strong> — IBM via edX – Pandas, NumPy, Data Analysis</span>
+          <span class="cert-date">Apr 2025</span>
+        </div>
+        <div class="cert-item">
+          <span>• <strong>Introduction to Web Development</strong> (HTML5, CSS3, JS) — IBM via edX</span>
+          <span class="cert-date">May 2025</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hobbies -->
+    <section>
+      <h2 class="section-title">Hobbies</h2>
+      <div class="skills-block">
+        • Programming, Chess, Reading, Sports (Football, Badminton), Gym
+      </div>
+    </section>
+
+  </div>
+
+</body>
+</html>

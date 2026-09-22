@@ -273,8 +273,9 @@ const COMMANDS = {
 
   sudo: `<span class="text-amber-400">Nice try! Subhash has already granted you read & interview privileges.</span>`,
 
-  resume: `Opening resume... (click below if popup blocked)
-  -> <a href="assets/resume.pdf" target="_blank" class="text-cyan-400 underline">View assets/resume.pdf</a>`
+  resume: `Opening 1-Page Resume... (click below if popup blocked)
+  • <a href="resume.html" target="_blank" class="text-cyan-400 underline">View 1-Page Interactive Resume (HTML)</a>
+  • <a href="assets/resume.pdf" target="_blank" class="text-violet-400 underline">Download Original PDF</a>`
 };
 
 function printToTerminal(htmlContent, isCommand = false) {

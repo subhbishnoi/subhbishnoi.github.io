@@ -84,14 +84,15 @@
         <a href="#projects" class="hover:text-cyan-400 transition-colors">Projects</a>
         <a href="#experience" class="hover:text-cyan-400 transition-colors">Experience</a>
         <a href="#certifications" class="hover:text-cyan-400 transition-colors">Certifications</a>
+        <a href="#resume" class="hover:text-cyan-400 transition-colors text-cyan-300">Resume</a>
         <a href="#terminal" class="hover:text-cyan-400 transition-colors font-mono text-xs px-2.5 py-1 rounded-md bg-slate-800/60 border border-slate-700/60">&gt; Terminal</a>
       </nav>
 
       <!-- Action Buttons -->
       <div class="hidden sm:flex items-center gap-4">
-        <a href="assets/resume.pdf" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-cyan-500/50 transition-all shadow-sm">
+        <a href="resume.html" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-cyan-500/50 transition-all shadow-sm">
           <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
-          Resume
+          1-Page Resume
         </a>
         <a href="#contact" class="inline-flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30 transition-all transform hover:-translate-y-0.5">
           <i data-lucide="send" class="w-4 h-4"></i>
@@ -112,9 +113,11 @@
       <a href="#projects" class="block text-slate-300 hover:text-cyan-400 py-1 mobile-link">Projects</a>
       <a href="#experience" class="block text-slate-300 hover:text-cyan-400 py-1 mobile-link">Experience</a>
       <a href="#certifications" class="block text-slate-300 hover:text-cyan-400 py-1 mobile-link">Certifications</a>
+      <a href="resume.html" target="_blank" class="block text-cyan-300 font-semibold py-1 mobile-link">📄 1-Page Resume</a>
       <a href="#terminal" class="block text-cyan-400 font-mono text-sm py-1 mobile-link">&gt; Terminal Console</a>
       <div class="pt-4 flex flex-col gap-3">
-        <a href="assets/resume.pdf" target="_blank" class="w-full text-center py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm font-semibold">Download Resume</a>
+        <a href="resume.html" target="_blank" class="w-full text-center py-2.5 rounded-lg bg-slate-800 border border-slate-700 text-slate-200 text-sm font-semibold">View 1-Page Resume</a>
+        <a href="assets/resume.pdf" target="_blank" class="w-full text-center py-2.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-400 text-xs font-semibold">Download Original PDF</a>
         <a href="#contact" class="w-full text-center py-2.5 rounded-lg bg-gradient-to-r from-cyan-500 to-violet-600 text-white text-sm font-semibold mobile-link">Contact Me</a>
       </div>
     </div>
@@ -154,9 +157,9 @@
             <i data-lucide="layers" class="w-4 h-4"></i>
             Explore Projects
           </a>
-          <a href="assets/resume.pdf" target="_blank" class="px-8 py-3.5 rounded-xl text-sm font-semibold tracking-wide bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-cyan-500/60 shadow-lg transition-all transform hover:-translate-y-1 flex items-center gap-2">
-            <i data-lucide="download" class="w-4 h-4 text-cyan-400"></i>
-            Download Resume
+          <a href="resume.html" target="_blank" class="px-8 py-3.5 rounded-xl text-sm font-semibold tracking-wide bg-slate-900/90 hover:bg-slate-800 text-slate-200 border border-slate-700/80 hover:border-cyan-500/60 shadow-lg transition-all transform hover:-translate-y-1 flex items-center gap-2">
+            <i data-lucide="file-text" class="w-4 h-4 text-cyan-400"></i>
+            View 1-Page Resume
           </a>
           <button onclick="copyEmail()" class="px-6 py-3.5 rounded-xl text-sm font-semibold tracking-wide bg-slate-900/50 hover:bg-slate-800/80 text-slate-300 border border-slate-800 hover:border-slate-700 transition-all flex items-center gap-2">
             <i data-lucide="copy" class="w-4 h-4 text-violet-400"></i>
@@ -739,6 +742,44 @@
           </div>
         </div>
 
+      </div>
+    </section>
+
+    <!-- ==================== ONE-PAGE RESUME SECTION ==================== -->
+    <section id="resume" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 scroll-mt-24">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-8 h-[2px] bg-cyan-500"></span>
+            <span class="text-cyan-400 font-mono text-xs uppercase tracking-widest">Curriculum Vitae</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white">One-Page Resume</h2>
+          <p class="text-slate-400 text-sm mt-2">ATS-compliant, single-page overview with verified project links and academic background.</p>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="resume.html" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-cyan-300 border border-slate-700 hover:border-cyan-500/50 transition-all">
+            <i data-lucide="external-link" class="w-4 h-4"></i> Open in New Tab
+          </a>
+          <a href="resume.html" target="_blank" onclick="window.open('resume.html', '_blank').print();" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 hover:border-slate-600 transition-all">
+            <i data-lucide="printer" class="w-4 h-4 text-violet-400"></i> Print / Save PDF
+          </a>
+          <a href="assets/resume.pdf" target="_blank" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-cyan-500 to-violet-600 hover:from-cyan-400 hover:to-violet-500 text-white shadow-lg shadow-cyan-500/20 transition-all">
+            <i data-lucide="download" class="w-4 h-4"></i> Download PDF
+          </a>
+        </div>
+      </div>
+
+      <!-- Embedded One-Page Resume Preview Frame -->
+      <div class="rounded-2xl border border-slate-800 bg-[#0e1424] shadow-2xl overflow-hidden p-2 sm:p-4">
+        <div class="flex items-center justify-between px-3 py-2 border-b border-slate-800 text-xs text-slate-400 font-mono mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+            <span>resume.html • Interactive One-Page Document</span>
+          </div>
+          <a href="resume.html" target="_blank" class="text-cyan-400 hover:underline">Fullscreen ↗</a>
+        </div>
+        <iframe src="resume.html" class="w-full h-[780px] rounded-xl border border-slate-700/60 bg-white" title="Subhash Chandra - One Page Resume"></iframe>
       </div>
     </section>
 
