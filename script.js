@@ -1,343 +1,1077 @@
-/**
- * Subhash Chandra - AI/ML Developer Portfolio
- * Interactive Canvas, Terminal Emulator & Event Handlers
- */
+/* =========================================================
+   SUBHASH CHANDRA
+   PORTFOLIO INTERACTIONS
+========================================================= */
 
-// ==========================================
-// 1. NEURAL NETWORK CANVAS ANIMATION
-// ==========================================
-const canvas = document.getElementById('neural-canvas');
-const ctx = canvas ? canvas.getContext('2d') : null;
 
-let width = 0;
-let height = 0;
-let particles = [];
-let mouse = { x: null, y: null, radius: 120 };
+/* =========================================================
+   THEME
+========================================================= */
 
-function resizeCanvas() {
-  if (!canvas) return;
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-  initParticles();
+const themeHint =
+    document.getElementById("themeHint");
+
+
+const savedTheme =
+    localStorage.getItem(
+        "portfolio-theme"
+    );
+
+
+if (savedTheme === "dark") {
+
+    document.body.classList.add(
+        "dark-mode"
+    );
 }
 
-class Particle {
-  constructor() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 0.8;
-    this.vy = (Math.random() - 0.5) * 0.8;
-    this.radius = Math.random() * 2 + 1.2;
-    this.baseAlpha = Math.random() * 0.5 + 0.2;
-  }
 
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
+/*
+    Double-click anywhere on the page
+    to switch theme.
+*/
 
-    if (this.x < 0 || this.x > width) this.vx = -this.vx;
-    if (this.y < 0 || this.y > height) this.vy = -this.vy;
+document.addEventListener(
+    "dblclick",
+    function (event) {
 
-    // Mouse interaction
-    if (mouse.x !== null && mouse.y !== null) {
-      const dx = mouse.x - this.x;
-      const dy = mouse.y - this.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < mouse.radius) {
-        const force = (mouse.radius - dist) / mouse.radius;
-        this.x -= (dx / dist) * force * 2;
-        this.y -= (dy / dist) * force * 2;
-      }
+
+        /*
+            Don't trigger theme switch
+            when double-clicking links.
+        */
+
+        if (event.target.closest("a")) {
+
+            return;
+        }
+
+
+        document.body.classList.toggle(
+            "dark-mode"
+        );
+
+
+        const isDark =
+            document.body.classList.contains(
+                "dark-mode"
+            );
+
+
+        localStorage.setItem(
+            "portfolio-theme",
+            isDark
+                ? "dark"
+                : "light"
+        );
+
+
+        if (themeHint) {
+
+            themeHint.textContent =
+                isDark
+                    ? "DARK MODE"
+                    : "LIGHT MODE";
+
+
+            themeHint.classList.add(
+                "show"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    themeHint.classList.remove(
+                        "show"
+                    );
+
+                },
+                1200
+            );
+
+        }
+
     }
-  }
+);
 
-  draw() {
-    if (!ctx) return;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(6, 182, 212, ${this.baseAlpha})`;
-    ctx.fill();
-  }
-}
 
-function initParticles() {
-  particles = [];
-  const count = Math.min(Math.floor((width * height) / 14000), 85);
-  for (let i = 0; i < count; i++) {
-    particles.push(new Particle());
-  }
-}
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
 
-function connectParticles() {
-  if (!ctx) return;
-  const maxDistance = 120;
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
+const revealElements =
+    document.querySelectorAll(
+        ".reveal"
+    );
 
-      if (dist < maxDistance) {
-        const alpha = (1 - dist / maxDistance) * 0.25;
-        ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-        ctx.lineWidth = 0.8;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.stroke();
-      }
+
+const revealObserver =
+    new IntersectionObserver(
+
+        function (entries) {
+
+            entries.forEach(
+                function (entry) {
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        entry.target.classList.add(
+                            "visible"
+                        );
+
+
+                        revealObserver.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                }
+            );
+
+        },
+
+        {
+            threshold: 0.12
+        }
+
+    );
+
+
+revealElements.forEach(
+    function (element) {
+
+        revealObserver.observe(
+            element
+        );
+
     }
-  }
-}
+);
 
-function animateCanvas() {
-  if (!ctx) return;
-  ctx.clearRect(0, 0, width, height);
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-  }
-  connectParticles();
-  requestAnimationFrame(animateCanvas);
-}
 
-if (canvas) {
-  window.addEventListener('resize', resizeCanvas);
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-  window.addEventListener('mouseleave', () => {
-    mouse.x = null;
-    mouse.y = null;
-  });
-  resizeCanvas();
-  animateCanvas();
-}
+/* =========================================================
+   PROJECT CURSOR PREVIEW
+========================================================= */
 
-// ==========================================
-// 2. CLIPBOARD & TOAST NOTIFICATION
-// ==========================================
-function showToast(message) {
-  const toast = document.getElementById('toast');
-  const toastMsg = document.getElementById('toast-message');
-  if (!toast || !toastMsg) return;
+const projectPreview =
+    document.getElementById(
+        "cursorProjectPreview"
+    );
 
-  toastMsg.textContent = message;
-  toast.classList.remove('translate-y-20', 'opacity-0');
-  toast.classList.add('translate-y-0', 'opacity-100');
 
-  setTimeout(() => {
-    toast.classList.remove('translate-y-0', 'opacity-100');
-    toast.classList.add('translate-y-20', 'opacity-0');
-  }, 2800);
-}
+const previewTitle =
+    document.getElementById(
+        "cursorPreviewTitle"
+    );
 
-function copyEmail() {
-  const email = 'bishnoisub0@gmail.com';
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(email).then(() => {
-      showToast('Copied: ' + email);
-    }).catch(() => {
-      fallbackCopy(email);
-    });
-  } else {
-    fallbackCopy(email);
-  }
-}
 
-function fallbackCopy(text) {
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand('copy');
-    showToast('Copied: ' + text);
-  } catch (err) {
-    showToast('Email: ' + text);
-  }
-  document.body.removeChild(textarea);
-}
+const previewTech =
+    document.getElementById(
+        "cursorPreviewTech"
+    );
 
-// ==========================================
-// 3. MOBILE MENU TOGGLE
-// ==========================================
-const mobileBtn = document.getElementById('mobile-menu-btn');
-const mobileMenu = document.getElementById('mobile-menu');
 
-if (mobileBtn && mobileMenu) {
-  mobileBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-  });
+const projects =
+    document.querySelectorAll(
+        ".project-link"
+    );
 
-  document.querySelectorAll('.mobile-link').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.add('hidden');
-    });
-  });
-}
 
-// ==========================================
-// 4. PROJECT FILTER SYSTEM
-// ==========================================
-const filterButtons = document.querySelectorAll('.filter-btn');
-const projectCards = document.querySelectorAll('.project-card');
+const projectData = {
 
-filterButtons.forEach((btn) => {
-  btn.addEventListener('click', () => {
-    filterButtons.forEach((b) => {
-      b.classList.remove('active');
-      b.classList.add('text-slate-400');
-    });
-    btn.classList.add('active');
-    btn.classList.remove('text-slate-400');
 
-    const filter = btn.getAttribute('data-filter');
+    snake: {
 
-    projectCards.forEach((card) => {
-      const category = card.getAttribute('data-category');
-      if (filter === 'all' || category === filter) {
-        card.style.display = 'flex';
-        setTimeout(() => {
-          card.style.opacity = '1';
-          card.style.transform = 'translateY(0)';
-        }, 10);
-      } else {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(15px)';
-        setTimeout(() => {
-          card.style.display = 'none';
-        }, 200);
-      }
-    });
-  });
-});
+        number: "01",
 
-// ==========================================
-// 5. INTERACTIVE TERMINAL EMULATOR
-// ==========================================
-const terminalOutput = document.getElementById('terminal-output');
-const terminalInput = document.getElementById('terminal-input');
+        title:
+            "Autonomous Snake AI",
 
-const COMMANDS = {
-  help: `Available commands:
-  - <span class="text-cyan-400">skills</span>         : List technical competencies & toolsets
-  - <span class="text-cyan-400">projects</span>       : View highlight ML & AI systems
-  - <span class="text-cyan-400">experience</span>     : View Outlier.ai ML freelancer background
-  - <span class="text-cyan-400">education</span>      : Academic degree & university information
-  - <span class="text-cyan-400">certifications</span> : Verified AWS, edX, and IIT-M credentials
-  - <span class="text-cyan-400">contact</span>        : Display email, phone, and links
-  - <span class="text-cyan-400">resume</span>         : Open resume PDF
-  - <span class="text-cyan-400">whoami</span>         : Current session context
-  - <span class="text-cyan-400">clear</span>          : Clean the terminal window`,
+        tech:
+            "DQN · Q-Learning · Reinforcement Learning"
 
-  skills: `Technical Skills Matrix:
-  • <span class="text-cyan-300">Languages:</span> Python (Advanced), SQL, Java, JavaScript, C
-  • <span class="text-cyan-300">ML/AI:</span> Deep Q-Learning (DQN), CNNs, RNNs, RAG, Transformers, YOLO
-  • <span class="text-cyan-300">Frameworks:</span> PyTorch, TensorFlow, LangChain, FastAPI, OpenCV, Scikit-learn
-  • <span class="text-cyan-300">MLOps & Tools:</span> Docker, MLflow, Git/GitHub, Linux, MySQL, Render Cloud`,
+    },
 
-  projects: `Featured Engineered Systems:
-  1. <span class="text-white font-bold">YouTube Comment Analyzer</span> [RAG, FastAPI, Docker, MLflow]
-     -> Semantic retrieval & sentiment insights from video comments.
-  2. <span class="text-white font-bold">Autonomous Snake Game</span> [Deep Q-Learning, TensorFlow, Pygame]
-     -> DQN agent achieving 10x higher score (35.67 avg) vs tabular Q-learning.
-  3. <span class="text-white font-bold">Gym Injury Risk Predictor</span> [FastAPI, Render, MLOps]
-     -> Microservice predicting injury probabilities from biometrics.`,
 
-  experience: `Professional Experience:
-  <span class="text-emerald-400 font-bold">Machine Learning Freelancer @ Outlier.ai</span> (2024 - Present | Remote)
-  • RLHF evaluation & alignment of 50+ complex LLM prompt-response pairs.
-  • Preprocessed 100K+ data records with Pandas/NumPy for model ingestion.
-  • Performed stratified cross-validation and ROC-AUC benchmarking.`,
+    gym: {
 
-  education: `Academic Credentials:
-  <span class="text-cyan-400 font-bold">D.Y. Patil Deemed to be University</span> (July 2023 - June 2027)
-  • B.Tech in Computer Science & Engineering (AI & ML) - Navi Mumbai, India
-  • CGPA: 7.42 / 10.0`,
+        number: "02",
 
-  certifications: `Accreditations:
-  • AWS Academy Graduate - Machine Learning Foundations (Credly)
-  • AWS Academy Graduate - Cloud Foundations (Credly)
-  • Generative AI & LLMs on AWS (edX / SageMaker)
-  • Data Science for Engineers (IIT Madras via NPTEL)`,
+        title:
+            "Gym Injury Risk Predictor",
 
-  contact: `Direct Contact Channels:
-  • Email   : <a href="mailto:bishnoisub0@gmail.com" class="text-cyan-400 hover:underline">bishnoisub0@gmail.com</a>
-  • Phone   : +91 95871 19902
-  • GitHub  : <a href="https://github.com/subhbishnoi" target="_blank" class="text-cyan-400 hover:underline">github.com/subhbishnoi</a>
-  • Location: Ghatkopar East, Mumbai, Maharashtra`,
+        tech:
+            "Machine Learning · FastAPI · MLOps"
 
-  whoami: `guest@recruiter ~ exploring Subhash Chandra's engineering portfolio.`,
+    },
 
-  sudo: `<span class="text-amber-400">Nice try! Subhash has already granted you read & interview privileges.</span>`,
 
-  resume: `Opening 1-Page Resume... (click below if popup blocked)
-  • <a href="resume.html" target="_blank" class="text-cyan-400 underline">View 1-Page Interactive Resume (HTML)</a>
-  • <a href="assets/resume.pdf" target="_blank" class="text-violet-400 underline">Download Original PDF</a>`
+    youtube: {
+
+        number: "03",
+
+        title:
+            "YouTube Comment Analyzer",
+
+        tech:
+            "NLP · FastAPI"
+
+    }
+
 };
 
-function printToTerminal(htmlContent, isCommand = false) {
-  if (!terminalOutput) return;
-  const line = document.createElement('div');
-  line.className = isCommand ? 'text-cyan-400 font-semibold' : 'text-slate-300 text-xs sm:text-sm pl-2';
-  line.innerHTML = htmlContent;
-  terminalOutput.appendChild(line);
-  terminalOutput.scrollTop = terminalOutput.scrollHeight;
-}
 
-function runCommand(rawCmd) {
-  const cmd = (rawCmd || '').trim().toLowerCase();
-  if (!cmd) return;
+let mouseX = 0;
 
-  printToTerminal(`$ ${cmd}`, true);
+let mouseY = 0;
 
-  if (cmd === 'clear') {
-    terminalOutput.innerHTML = `
-      <div class="text-cyan-400 font-semibold">Terminal screen cleared.</div>
-      <div class="text-slate-400 text-xs">Type <span class="text-white font-bold">help</span> to view commands.</div>
-    `;
-    return;
-  }
+let previewX = 0;
 
-  if (COMMANDS[cmd]) {
-    printToTerminal(COMMANDS[cmd]);
-    if (cmd === 'resume') {
-      window.open('assets/resume.pdf', '_blank');
+let previewY = 0;
+
+
+document.addEventListener(
+    "mousemove",
+    function (event) {
+
+        mouseX =
+            event.clientX;
+
+        mouseY =
+            event.clientY;
+
     }
-  } else {
-    printToTerminal(`<span class="text-rose-400">Command not recognized: '${cmd}'. Type 'help' for available commands.</span>`);
-  }
+);
+
+
+function movePreview() {
+
+
+    previewX +=
+        (mouseX - previewX)
+        * 0.12;
+
+
+    previewY +=
+        (mouseY - previewY)
+        * 0.12;
+
+
+    if (projectPreview) {
+
+        projectPreview.style.left =
+            `${previewX + 22}px`;
+
+
+        projectPreview.style.top =
+            `${previewY + 22}px`;
+
+    }
+
+
+    requestAnimationFrame(
+        movePreview
+    );
+
 }
+
+
+movePreview();
+
+
+projects.forEach(
+    function (project) {
+
+
+        project.addEventListener(
+            "mouseenter",
+            function () {
+
+
+                const projectName =
+                    project.dataset.project;
+
+
+                const data =
+                    projectData[
+                        projectName
+                    ];
+
+
+                if (!data) {
+
+                    return;
+                }
+
+
+                if (previewTitle) {
+
+                    previewTitle.textContent =
+                        data.title;
+
+                }
+
+
+                if (previewTech) {
+
+                    previewTech.textContent =
+                        data.tech;
+
+                }
+
+
+                const number =
+                    document.querySelector(
+                        ".cursor-preview-number"
+                    );
+
+
+                if (number) {
+
+                    number.textContent =
+                        data.number;
+
+                }
+
+
+                if (projectPreview) {
+
+                    projectPreview.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+
+        project.addEventListener(
+            "mouseleave",
+            function () {
+
+                if (projectPreview) {
+
+                    projectPreview.classList.remove(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   SMOOTH NAVIGATION
+========================================================= */
+
+const navLinks =
+    document.querySelectorAll(
+        'a[href^="#"]'
+    );
+
+
+navLinks.forEach(
+    function (link) {
+
+
+        link.addEventListener(
+            "click",
+            function (event) {
+
+
+                const targetId =
+                    link.getAttribute(
+                        "href"
+                    );
+
+
+                if (
+                    !targetId ||
+                    targetId === "#"
+                ) {
+
+                    return;
+
+                }
+
+
+                const target =
+                    document.querySelector(
+                        targetId
+                    );
+
+
+                if (target) {
+
+                    event.preventDefault();
+
+
+                    target.scrollIntoView({
+
+                        behavior:
+                            "smooth",
+
+                        block:
+                            "start"
+
+                    });
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   INTERACTIVE TERMINAL
+========================================================= */
+
+const terminalInput =
+    document.getElementById(
+        "terminalInput"
+    );
+
+
+const terminalHistory =
+    document.getElementById(
+        "terminalHistory"
+    );
+
+
+const terminalScreen =
+    document.getElementById(
+        "terminalScreen"
+    );
+
+
+/* =========================================================
+   JOKES
+========================================================= */
+
+const jokes = [
+
+    "Why did the ML model go to the gym?\nTo improve its weights. 💀",
+
+    "Why was the neural network bad at relationships?\nIt had too many hidden layers.",
+
+    "A SQL query walks into a bar...\nIt walks up to two tables and asks: 'Can I join you?'",
+
+    "Why do programmers prefer dark mode?\nBecause light attracts bugs.",
+
+    "My model achieved 99% accuracy.\nThen I tested it on real life.",
+
+    "Why did the developer go broke?\nBecause he used up all his cache.",
+
+    "I told my computer I needed a break.\nNow it won't stop sending me vacation ads.",
+
+    "Machine learning is basically:\n'Let's throw data at it and see what happens.'"
+
+];
+
+
+/* =========================================================
+   TERMINAL COMMANDS
+========================================================= */
+
+const commands = [
+
+    "help",
+
+    "about",
+
+    "projects",
+
+    "skills",
+
+    "contact",
+
+    "joke",
+
+    "whoami",
+
+    "snake",
+
+    "clear",
+
+    "sudo hire subhash",
+
+    "coffee"
+
+];
+
+
+/* =========================================================
+   RANDOM ITEM
+========================================================= */
+
+function randomItem(array) {
+
+    return array[
+        Math.floor(
+            Math.random() * array.length
+        )
+    ];
+
+}
+
+
+/* =========================================================
+   ADD TERMINAL ENTRY
+========================================================= */
+
+function addTerminalEntry(
+    command,
+    result
+) {
+
+
+    const entry =
+        document.createElement(
+            "div"
+        );
+
+
+    entry.className =
+        "terminal-history-entry";
+
+
+    const commandElement =
+        document.createElement(
+            "div"
+        );
+
+
+    commandElement.className =
+        "terminal-command";
+
+
+    commandElement.textContent =
+        `subhash@portfolio:~$ ${command}`;
+
+
+    const resultElement =
+        document.createElement(
+            "div"
+        );
+
+
+    resultElement.className =
+        "terminal-result";
+
+
+    resultElement.innerHTML =
+        result;
+
+
+    entry.appendChild(
+        commandElement
+    );
+
+
+    entry.appendChild(
+        resultElement
+    );
+
+
+    terminalHistory.appendChild(
+        entry
+    );
+
+
+    /*
+        Scroll terminal to bottom.
+    */
+
+    terminalScreen.scrollTop =
+        terminalScreen.scrollHeight;
+
+}
+
+
+/* =========================================================
+   TERMINAL COMMAND HANDLER
+========================================================= */
+
+function executeCommand(
+    rawCommand
+) {
+
+
+    const command =
+        rawCommand
+            .trim()
+            .toLowerCase();
+
+
+    if (!command) {
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------
+       HELP
+    ----------------------------------------- */
+
+    if (command === "help") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Available commands:
+
+help        Show available commands
+about       About Subhash
+projects    View live projects
+skills      View technical skills
+contact     Contact information
+joke        Tell a developer joke
+whoami      Identify the user
+snake       Launch Snake AI
+coffee      Developer fuel
+clear       Clear terminal
+
+Try:
+sudo hire subhash`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       ABOUT
+    ----------------------------------------- */
+
+    if (command === "about") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Subhash Chandra
+
+AI / ML Engineer
+B.Tech — Artificial Intelligence & Machine Learning
+
+Focus:
+Machine Learning
+Reinforcement Learning
+Computer Vision
+FastAPI
+MLOps`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       WHOAMI
+    ----------------------------------------- */
+
+    if (command === "whoami") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Subhash Chandra
+
+AI / ML Engineer
+Builder of ML systems
+Occasional bug creator
+Professional coffee consumer`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       PROJECTS
+    ----------------------------------------- */
+
+    if (command === "projects") {
+
+        addTerminalEntry(
+
+            command,
+
+            `<strong>[01]</strong> Autonomous Snake AI
+     DQN · Q-Learning
+     ● LIVE
+
+<strong>[02]</strong> Gym Injury Risk Predictor
+     ML · FastAPI · MLOps
+     ● LIVE
+
+<strong>[03]</strong> YouTube Comment Analyzer
+     NLP · FastAPI
+     ● LIVE`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       SKILLS
+    ----------------------------------------- */
+
+    if (command === "skills") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Python · Java · C · JavaScript · SQL
+
+Machine Learning
+Scikit-learn · Pandas · NumPy
+
+Deep Learning
+PyTorch · TensorFlow · Keras · OpenCV
+
+AI
+DQN · Q-Learning · NLP
+
+Backend
+FastAPI · Flask
+
+MLOps
+Docker · MLflow · GitHub Actions`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       CONTACT
+    ----------------------------------------- */
+
+    if (command === "contact") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Email:
+bishnoisub0@gmail.com
+
+LinkedIn:
+linkedin.com/in/subhashbishnoi0/
+
+GitHub:
+github.com/subhbishnoi`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       JOKE
+    ----------------------------------------- */
+
+    if (command === "joke") {
+
+        addTerminalEntry(
+
+            command,
+
+            randomItem(jokes)
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       SNAKE
+    ----------------------------------------- */
+
+    if (command === "snake") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Launching Autonomous Snake AI...
+
+DQN ................. ONLINE
+Q-Learning .......... ONLINE
+Environment ......... READY
+
+Opening live project...`
+
+        );
+
+
+        setTimeout(
+            function () {
+
+                window.open(
+                    "https://autonomous-snake-dqn.onrender.com/",
+                    "_blank"
+                );
+
+            },
+            700
+        );
+
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       COFFEE
+    ----------------------------------------- */
+
+    if (command === "coffee") {
+
+        addTerminalEntry(
+
+            command,
+
+            `Coffee dependency detected.
+
+Status:
+████████████████████ 100%
+
+System can continue. ☕`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       SUDO HIRE
+    ----------------------------------------- */
+
+    if (
+        command ===
+        "sudo hire subhash"
+    ) {
+
+        addTerminalEntry(
+
+            command,
+
+            `Initializing Subhash...
+
+[████████████████████] 100%
+
+✓ Python
+✓ Machine Learning
+✓ FastAPI
+✓ MLOps
+✓ Reinforcement Learning
+✓ Computer Vision
+
+ACCESS GRANTED.
+
+SYSTEM MESSAGE:
+You should probably hire him. 😎`
+
+        );
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       CLEAR
+    ----------------------------------------- */
+
+    if (command === "clear") {
+
+        terminalHistory.innerHTML =
+            "";
+
+        return;
+    }
+
+
+    /* -----------------------------------------
+       UNKNOWN COMMAND
+    ----------------------------------------- */
+
+    addTerminalEntry(
+
+        command,
+
+        `Command not found: ${command}
+
+Type <strong>help</strong> to see what I understand.
+
+Maybe the AI needs more training. 🤖`
+
+    );
+
+}
+
+
+/* =========================================================
+   ENTER KEY
+========================================================= */
 
 if (terminalInput) {
-  terminalInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      const val = terminalInput.value;
-      terminalInput.value = '';
-      runCommand(val);
-    }
-  });
+
+    terminalInput.addEventListener(
+        "keydown",
+        function (event) {
+
+
+            if (
+                event.key === "Enter"
+            ) {
+
+
+                const command =
+                    terminalInput.value;
+
+
+                terminalInput.value =
+                    "";
+
+
+                executeCommand(
+                    command
+                );
+
+            }
+
+        }
+    );
+
 }
 
-// ==========================================
-// 6. CONTACT FORM SUBMIT HANDLER
-// ==========================================
-const contactForm = document.getElementById('contact-form');
-if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = document.getElementById('form-name')?.value || 'Friend';
-    const email = document.getElementById('form-email')?.value || '';
-    const subject = document.getElementById('form-subject')?.value || '';
-    const message = document.getElementById('form-message')?.value || '';
 
-    // Create mailto link as fallback so user can send immediately
-    const mailtoUri = `mailto:bishnoisub0@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
-    window.location.href = mailtoUri;
+/* =========================================================
+   QUICK COMMAND BUTTONS
+========================================================= */
 
-    showToast('Opening your email client to send to Subhash...');
-    contactForm.reset();
-  });
+const commandButtons =
+    document.querySelectorAll(
+        "[data-command]"
+    );
+
+
+commandButtons.forEach(
+    function (button) {
+
+
+        button.addEventListener(
+            "click",
+            function () {
+
+
+                const command =
+                    button.dataset.command;
+
+
+                executeCommand(
+                    command
+                );
+
+
+                if (terminalInput) {
+
+                    terminalInput.focus();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =========================================================
+   CLICK TERMINAL TO FOCUS INPUT
+========================================================= */
+
+if (terminalScreen) {
+
+    terminalScreen.addEventListener(
+        "click",
+        function () {
+
+            if (terminalInput) {
+
+                terminalInput.focus();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   DESKTOP CURSOR
+========================================================= */
+
+if (
+    window.matchMedia(
+        "(pointer: fine)"
+    ).matches
+) {
+
+
+    projects.forEach(
+        function (project) {
+
+
+            project.addEventListener(
+                "mouseenter",
+                function () {
+
+                    document.body.style.cursor =
+                        "none";
+
+                }
+            );
+
+
+            project.addEventListener(
+                "mouseleave",
+                function () {
+
+                    document.body.style.cursor =
+                        "";
+
+                }
+            );
+
+        }
+    );
+
 }
